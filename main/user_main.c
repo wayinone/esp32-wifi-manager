@@ -35,7 +35,9 @@ SOFTWARE.
 #include "esp_system.h"
 #include "esp_log.h"
 
-#include "wifi_manager.h"
+#include "include/wifi_manager.h"
+
+
 
 /* @brief tag used for ESP serial console messages */
 static const char TAG[] = "main";
@@ -47,7 +49,7 @@ static const char TAG[] = "main";
 void monitoring_task(void *pvParameter)
 {
 	for(;;){
-		ESP_LOGI(TAG, "free heap: %d",esp_get_free_heap_size());
+		// ESP_LOGI(TAG, "free heap: %d",esp_get_free_heap_size());
 		vTaskDelay( pdMS_TO_TICKS(10000) );
 	}
 }

@@ -1,12 +1,8 @@
-if(IDF_VERSION_MAJOR GREATER_EQUAL 4)
-    idf_component_register(SRC_DIRS src
-        REQUIRES log nvs_flash mdns wpa_supplicant lwip esp_http_server
-        INCLUDE_DIRS src
-        EMBED_FILES src/style.css src/code.js src/index.html)
-else()
-    set(COMPONENT_SRCDIRS src)
-    set(COMPONENT_ADD_INCLUDEDIRS src)
-    set(COMPONENT_REQUIRES log nvs_flash mdns wpa_supplicant lwip esp_http_server)
-    set(COMPONENT_EMBED_FILES src/style.css src/code.js src/index.html)
-    register_component()
-endif()
+# For more information about build system see
+# https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html
+# The following five lines of boilerplate have to be in your project's
+# CMakeLists in this exact order for cmake to work correctly
+cmake_minimum_required(VERSION 3.16)
+
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+project(esp32-wifi-manager)

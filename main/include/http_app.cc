@@ -161,8 +161,8 @@ static esp_err_t http_server_post_handler(httpd_req_t *req){
 		if(ssid_len && ssid_len <= MAX_SSID_SIZE && password_len && password_len <= MAX_PASSWORD_SIZE){
 
 			/* get the actual value of the headers */
-			ssid = malloc(sizeof(char) * (ssid_len + 1));
-			password = malloc(sizeof(char) * (password_len + 1));
+			ssid = (char*)malloc(sizeof(char) * (ssid_len + 1));
+			password = (char*)malloc(sizeof(char) * (password_len + 1));
 			httpd_req_get_hdr_value_str(req, "X-Custom-ssid", ssid, ssid_len+1);
 			httpd_req_get_hdr_value_str(req, "X-Custom-pwd", password, password_len+1);
 
@@ -221,7 +221,7 @@ static esp_err_t http_server_get_handler(httpd_req_t *req){
      * extra byte for null termination */
     buf_len = httpd_req_get_hdr_value_len(req, "Host") + 1;
     if (buf_len > 1) {
-    	host = malloc(buf_len);
+    	host = (char*) malloc(buf_len);
     	if(httpd_req_get_hdr_value_str(req, "Host", host, buf_len) != ESP_OK){
     		/* if something is wrong we just 0 the whole memory */
     		memset(host, 0x00, buf_len);
@@ -230,7 +230,7 @@ static esp_err_t http_server_get_handler(httpd_req_t *req){
 
 	/* determine if Host is from the STA IP address */
 	wifi_manager_lock_sta_ip_string(portMAX_DELAY);
-	bool access_from_sta_ip = host != NULL?strstr(host, wifi_manager_get_sta_ip_string()):false;
+	bool access_from_sta_ip = host != NULL?(strcmp(host, wifi_manager_get_sta_ip_string())==0):false;
 	wifi_manager_unlock_sta_ip_string();
 
 
@@ -407,7 +407,7 @@ static char* http_app_generate_url(const char* page){
 	int root_len = strlen(WEBAPP_LOCATION);
 	const size_t url_sz = sizeof(char) * ( (root_len+1) + ( strlen(page) + 1) );
 
-	ret = malloc(url_sz);
+	ret = (char*) malloc(url_sz);
 	memset(ret, 0x00, url_sz);
 	strcpy(ret, WEBAPP_LOCATION);
 	ret = strcat(ret, page);
@@ -441,13 +441,13 @@ void http_app_start(bool lru_purge_enable){
 
 			/* root url, eg "/"   */
 			const size_t http_root_url_sz = sizeof(char) * (root_len+1);
-			http_root_url = malloc(http_root_url_sz);
+			http_root_url = (char*) malloc(http_root_url_sz);
 			memset(http_root_url, 0x00, http_root_url_sz);
 			strcpy(http_root_url, WEBAPP_LOCATION);
 
 			/* redirect url */
 			size_t redirect_sz = 22 + root_len + 1; /* strlen(http://255.255.255.255) + strlen("/") + 1 for \0 */
-			http_redirect_url = malloc(sizeof(char) * redirect_sz);
+			http_redirect_url = (char*) malloc(sizeof(char) * redirect_sz);
 			*http_redirect_url = '\0';
 
 			if(root_len == 1){
