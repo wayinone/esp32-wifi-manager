@@ -41,7 +41,6 @@ Contains the freeRTOS task and all necessary support
 #include <freertos/event_groups.h>
 #include <freertos/timers.h>
 
-#include "http_app.h"
 
 #include "esp_wifi.h"
 #include "esp_event.h"
@@ -57,9 +56,10 @@ Contains the freeRTOS task and all necessary support
 #include "lwip/ip4_addr.h"
 
 
-#include "json.h"
-#include "dns_server.h"
-#include "nvs_sync.h"
+#include "utils/json.h"
+#include "servers/http_app.h"
+#include "servers/dns_server.h"
+#include "utils/nvs_sync.h"
 #include "wifi_manager.h"
 
 
@@ -1067,10 +1067,13 @@ void wifi_manager( void * pvParameters ){
 					if(uxBits & WIFI_MANAGER_SCAN_BIT){
 						esp_wifi_scan_stop();
 					}
-					ESP_ERROR_CHECK(esp_wifi_start() );
+
+
+					ESP_ERROR_CHECK(esp_wifi_start());
 
 					// ESP_ERROR_CHECK(esp_wifi_connect());
 					ESP_LOGI(TAG, "WIFI STA Connected to an AP");
+					
 				}
 
 				/* callback */

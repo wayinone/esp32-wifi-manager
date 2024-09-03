@@ -2,15 +2,15 @@ idf_component_register(
     # REQUIRES log nvs_flash mdns wpa_supplicant lwip esp_http_server
     SRCS 
         "user_main.c"
-        "include/wifi_manager.cc"
-        "include/dns_server.cc"
-        "include/http_app.cc"
-        "include/nvs_sync.cc"
-        "include/json.cc"
+        "wifi_manager/wifi_manager.cc"
+        "wifi_manager/utils/nvs_sync.cc"
+        "wifi_manager/utils/json.cc"
+        "wifi_manager/servers/dns_server.cc"
+        "wifi_manager/servers/http_app.cc"
     
     
     EMBED_FILES 
-        "include/style.css" 
-        "include/code.js" 
-        "include/index.html"        
+        "wifi_manager/html/style.css" 
+        "wifi_manager/html/code.js" 
+        "wifi_manager/html/index.html"        
 )

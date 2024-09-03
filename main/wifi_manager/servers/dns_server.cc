@@ -50,7 +50,7 @@ Contains the freeRTOS task for the DNS server that processes the requests.
 #include <lwip/dns.h>
 #include <byteswap.h>
 
-#include "wifi_manager.h"
+#include "../wifi_manager.h"
 #include "dns_server.h"
 
 static const char TAG[] = "dns_server";

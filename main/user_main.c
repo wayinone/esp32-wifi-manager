@@ -35,7 +35,7 @@ SOFTWARE.
 #include "esp_system.h"
 #include "esp_log.h"
 
-#include "include/wifi_manager.h"
+#include "wifi_manager/wifi_manager.h"
 
 
 
