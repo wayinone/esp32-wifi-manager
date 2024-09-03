@@ -49,7 +49,7 @@ Contains the freeRTOS task and all necessary support
 #include "esp_log.h"
 #include "nvs.h"
 #include "nvs_flash.h"
-#include "mdns.h"
+// #include "mdns.h"
 #include "lwip/api.h"
 #include "lwip/err.h"
 #include "lwip/netdb.h"
@@ -1068,10 +1068,7 @@ void wifi_manager( void * pvParameters ){
 						esp_wifi_scan_stop();
 					}
 
-
-					ESP_ERROR_CHECK(esp_wifi_start());
-
-					// ESP_ERROR_CHECK(esp_wifi_connect());
+					ESP_ERROR_CHECK(esp_wifi_connect());
 					ESP_LOGI(TAG, "WIFI STA Connected to an AP");
 					
 				}
