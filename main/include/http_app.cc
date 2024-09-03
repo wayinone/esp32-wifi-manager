@@ -139,6 +139,7 @@ static esp_err_t http_server_delete_handler(httpd_req_t *req){
 
 
 static esp_err_t http_server_post_handler(httpd_req_t *req){
+	ESP_LOGI(TAG, "POST %s", req->uri);
 
 
 	esp_err_t ret = ESP_OK;
@@ -147,8 +148,6 @@ static esp_err_t http_server_post_handler(httpd_req_t *req){
 
 	/* POST /connect.json */
 	if(strcmp(req->uri, http_connect_url) == 0){
-
-
 		/* buffers for the headers */
 		size_t ssid_len = 0, password_len = 0;
 		char *ssid = NULL, *password = NULL;

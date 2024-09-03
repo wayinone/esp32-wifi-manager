@@ -40,7 +40,9 @@ Contains the freeRTOS task and all necessary support
 #include <freertos/task.h>
 #include <freertos/event_groups.h>
 #include <freertos/timers.h>
+
 #include "http_app.h"
+
 #include "esp_wifi.h"
 #include "esp_event.h"
 #include "esp_netif.h"
@@ -1009,7 +1011,7 @@ void wifi_manager( void * pvParameters ){
 				}
 				break;
 
-			case WM_ORDER_START_WIFI_SCAN:
+			case WM_ORDER_START_WIFI_SCAN:{
 				ESP_LOGD(TAG, "MESSAGE: ORDER_START_WIFI_SCAN");
 
 				/* if a scan is already in progress this message is simply ignored thanks to the WIFI_MANAGER_SCAN_BIT uxBit */
@@ -1038,10 +1040,10 @@ void wifi_manager( void * pvParameters ){
 
 				/* callback */
 				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
-
+		}
 				break;
 
-			case WM_ORDER_CONNECT_STA:
+			case WM_ORDER_CONNECT_STA:{
 				ESP_LOGI(TAG, "MESSAGE: ORDER_CONNECT_STA");
 
 				/* very important: precise that this connection attempt is specifically requested.
@@ -1065,12 +1067,15 @@ void wifi_manager( void * pvParameters ){
 					if(uxBits & WIFI_MANAGER_SCAN_BIT){
 						esp_wifi_scan_stop();
 					}
-					ESP_ERROR_CHECK(esp_wifi_connect());
+					ESP_ERROR_CHECK(esp_wifi_start() );
+
+					// ESP_ERROR_CHECK(esp_wifi_connect());
+					ESP_LOGI(TAG, "WIFI STA Connected to an AP");
 				}
 
 				/* callback */
 				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
-
+				}
 				break;
 
 			case WM_EVENT_STA_DISCONNECTED:{
