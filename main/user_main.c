@@ -74,7 +74,7 @@ void app_main()
 	wifi_manager_set_callback(WM_EVENT_STA_GOT_IP, &cb_connection_ok);
 
 	/* register a callback for the start of the custom server */
-	wifi_manager_set_callback(WM_EVENT_STA_GOT_IP, &cb_start_custom_server);
+	wifi_manager_set_callback(WM_READY_FOR_CUSTOM_PROCESS, &cb_start_custom_server);
 
 	/* your code should go here. Here we simply create a task on core 2 that monitors free heap memory */
 }

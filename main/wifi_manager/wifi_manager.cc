@@ -875,7 +875,7 @@ BaseType_t wifi_manager_send_message(message_code_t code, void *param){
 }
 
 void wifi_manager_set_callback(message_code_t message_code, void (*func_ptr)(void*) ){
-
+	ESP_LOGI(TAG, "Registering callback for message code %i", message_code);
 	if(cb_ptr_arr && message_code < WM_MESSAGE_CODE_COUNT){
 		cb_ptr_arr[message_code] = func_ptr;
 	}
@@ -1253,10 +1253,14 @@ void wifi_manager( void * pvParameters ){
 
 					/* restart HTTP daemon */
 					http_app_stop();
-
-					/* callback */
-					if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
 				}
+
+				wifi_manager_send_message(WM_READY_FOR_CUSTOM_PROCESS, NULL);
+
+
+				/* callback */
+				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
+
 			} break;
 
 			case WM_EVENT_STA_GOT_IP:{
@@ -1309,6 +1313,8 @@ void wifi_manager( void * pvParameters ){
 						wifi_manager_send_message(WM_ORDER_STOP_AP, (void*)NULL);
 					}
 
+				} else {
+					wifi_manager_send_message(WM_READY_FOR_CUSTOM_PROCESS, NULL);
 				}
 
 				/* callback and free memory allocated for the void* param */
@@ -1328,8 +1334,17 @@ void wifi_manager( void * pvParameters ){
 
 				/* callback */
 				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
-}
+			}
 				break;
+
+			case WM_READY_FOR_CUSTOM_PROCESS: 
+			{
+				ESP_LOGI(TAG, "MESSAGE: WM_READY_FOR_CUSTOM_PROCESS");
+				/* callback */
+				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
+
+			}
+			break;
 
 			default:{}
 				break;

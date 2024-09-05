@@ -192,8 +192,9 @@ static esp_err_t http_server_post_handler(httpd_req_t *req){
 	}
 	else if (strcmp(req->uri, http_close_server_url) == 0)	{
 		ESP_LOGI(TAG, "User request to close wifi setting server");
-		abort(); // restart the device‘
-
+		wifi_manager_send_message(WM_ORDER_STOP_AP, NULL);
+		// or simply
+		// abort();
 	}
 	else{
 
