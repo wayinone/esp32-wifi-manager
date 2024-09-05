@@ -4,7 +4,7 @@
 This repo is copied from [esp32-wifi-manager](https://github.com/tonyp7/esp32-wifi-manager). 
 When use the code, I have encountered some problem (may be due to the newer esp-idf version). I then made some changes to fix bugs, and make some enhancement. Most of the original features were retained.
 
-Note that currently, the official [Espressif wifi provisioning](https://github.com/espressif/esp-idf/tree/v5.3.1/examples/provisioning/wifi_prov_mgr) is through and app with either BLE or SoftAP. The component here use only SoftAP and not require additional app to be download for user.
+Note that, currently, the official [Espressif wifi provisioning](https://github.com/espressif/esp-idf/tree/v5.3.1/examples/provisioning/wifi_prov_mgr) is through an App with either BLE or SoftAP. The component here use only SoftAP and not require additional app to be download for user.
 
 # Usage
 1. For first time setup, the device will entering AP mode, and user should select the SSID `esp32` in the wifi setting, with password `esp32pwd`
@@ -38,13 +38,11 @@ Note that currently, the official [Espressif wifi provisioning](https://github.c
 
   <img src="./assets/connect_success.PNG" alt="img" width="300">
 
-  * 
-  * This solves the issue of the web page hung when user entering the correct information. It was because the code was to turn off the AP mode immediately and there is no success signal return.
   * The `close-server` endpoint will trigger `WM_ORDER_STOP_AP` and then turn off the wifi setting page. 
     * It will then trigger `WM_READY_FOR_CUSTOM_PROCESS`
 
-* Previously, after the wifi setting is done, with the linked ip address, user still access the wifi setting page, however, in my situations, I would like to spin up my own server:
-  * I created a function `start_hello_world_webserver()` that spin up a very simple server. 
+* Previously, after the wifi setting is done, with the linked ip address, user still access the same wifi setting page, however, in my situations, I would like to spin up my own server:
+  * I created a simple function `start_hello_world_webserver()` that spin up a very simple server. 
   * User can use the `wifi_manager_set_callback` when `WM_READY_FOR_CUSTOM_PROCESS` is triggered. E.g. 
   
   ```
