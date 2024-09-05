@@ -34,7 +34,7 @@ Note that, currently, the official [Espressif wifi provisioning](https://github.
 * Adding a new state `WM_READY_FOR_CUSTOM_PROCESS` and it will be triggered by the following two situations when the ESP device started:
   * When there is a pre-stored wifi credential and STA is connected.
   * When user entering wifi setting page (when wifi is on the AP mode), provide connect-able wifi credential, and hit `close` button in the page.
-* Adding a close button  (`close-server` endpoint) in the wifi setting app, when successfully setup wifi password. Also provide the ip address that the STA mode is linked in the page.
+* Adding a `close` button  (`/close-server` endpoint) in the wifi setting app, when successfully setup the correct wifi password. Also provide the ip address that the STA mode is linked in the page.
 
   <img src="./assets/connect_success.PNG" alt="img" width="300">
 
