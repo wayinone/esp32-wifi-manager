@@ -84,6 +84,20 @@ docReady(async function () {
     false
   );
 
+  gel("close-server").addEventListener(
+    "click",
+    async () => {
+      console.log("Closing server...");
+      await fetch("close-server", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {timestamp: Date.now()},
+      });
+    }
+  );
+
   function cancel() {
     selectedSSID = "";
     connect_div.style.display = "none";
@@ -204,6 +218,9 @@ async function performConnect(conntype) {
   } else {
     pwd = gel("pwd").value;
   }
+
+  console.log("Connecting to " + selectedSSID);
+
   //reset connection
   gel("loading").style.display = "block";
   gel("connect-success").style.display = "none";
@@ -222,7 +239,7 @@ async function performConnect(conntype) {
       "X-Custom-ssid": selectedSSID,
       "X-Custom-pwd": pwd,
     },
-    body: { timestamp: Date.now() },
+    body: JSON.stringify({ timestamp: Date.now() }),
   });
 
   //now we can re-set the intervals regardless of result

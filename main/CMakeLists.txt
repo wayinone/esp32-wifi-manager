@@ -7,8 +7,8 @@ idf_component_register(
         "wifi_manager/utils/json.cc"
         "wifi_manager/servers/dns_server.cc"
         "wifi_manager/servers/http_app.cc"
-    
-    
+        "hello_world_server.cc"    
+            
     EMBED_FILES 
         "wifi_manager/html/style.css" 
         "wifi_manager/html/code.js" 

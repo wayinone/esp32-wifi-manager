@@ -7,7 +7,7 @@
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<link rel="stylesheet" href="style.css">
 	<script async src="code.js"></script>
-	<title>esp32-wifi-manager</title>
+	<title>Device Wifi Setup</title>
 </head>
 
 <body>
@@ -78,8 +78,14 @@
 						<p class="tctr">You may lose wifi access while the esp32 recalibrates its radio. Please wait
 							until your device automatically reconnects. This can take up to 30s.</p>
 					</div>
-					<div id="connect-success">
+					<div id="connect-success">						
 						<h3 class="gr">Success!</h3>
+						<p class="tctr"> After hit the "Close" button, please re-connect WIFI 
+							with SSID <span id="ssid-wait"></span> and visit <span id="ip"></span> access the configuation portal. </p>
+						<div class="buttons">
+							<input id="close-server" type="button" value="Close" class="ctr" />
+						</div>
+						<br>
 					</div>
 					<div id="connect-fail">
 						<h3 class="rd">Connection failed</h3>
@@ -88,7 +94,7 @@
 					</div>
 				</section>
 				<div class="buttons">
-					<input id="ok-connect" type="button" value="OK" class="ctr" />
+					<input id="ok-connect" type="button" value="Go Back" class="ctr" />
 				</div>
 			</div>
 			<div id="connect-details">

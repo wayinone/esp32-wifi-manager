@@ -48,7 +48,7 @@ function to process requests, decode URLs, serve files, etc. etc.
 
 
 /* @brief tag used for ESP serial console messages */
-static const char TAG[] = "http_server";
+static const char TAG[] = "http_wifi_setting_server";
 
 /* @brief the HTTP server handle */
 static httpd_handle_t httpd_handle = NULL;
@@ -65,6 +65,7 @@ static char* http_css_url = NULL;
 static char* http_connect_url = NULL;
 static char* http_ap_url = NULL;
 static char* http_status_url = NULL;
+static char* http_close_server_url = NULL;
 
 /**
  * @brief embedded binary data.
@@ -139,8 +140,6 @@ static esp_err_t http_server_delete_handler(httpd_req_t *req){
 
 
 static esp_err_t http_server_post_handler(httpd_req_t *req){
-	ESP_LOGI(TAG, "POST %s", req->uri);
-
 
 	esp_err_t ret = ESP_OK;
 
@@ -170,7 +169,7 @@ static esp_err_t http_server_post_handler(httpd_req_t *req){
 			memcpy(config->sta.ssid, ssid, ssid_len);
 			memcpy(config->sta.password, password, password_len);
 			ESP_LOGI(TAG, "ssid: %s, password: %s", ssid, password);
-			ESP_LOGD(TAG, "http_server_post_handler: wifi_manager_connect_async() call");
+			ESP_LOGI(TAG, "http_server_post_handler: wifi_manager_connect_async() call");
 			wifi_manager_connect_async();
 
 			/* free memory */
@@ -189,6 +188,11 @@ static esp_err_t http_server_post_handler(httpd_req_t *req){
 			httpd_resp_set_status(req, http_400_hdr);
 			httpd_resp_send(req, NULL, 0);
 		}
+
+	}
+	else if (strcmp(req->uri, http_close_server_url) == 0)	{
+		ESP_LOGI(TAG, "User request to close wifi setting server");
+		abort(); // restart the device‘
 
 	}
 	else{
@@ -388,11 +392,12 @@ void http_app_stop(){
 			free(http_status_url);
 			http_status_url = NULL;
 		}
-
 		/* stop server */
 		httpd_stop(httpd_handle);
 		httpd_handle = NULL;
 	}
+
+	ESP_LOGI(TAG, "http_app stopped");
 }
 
 
@@ -437,6 +442,7 @@ void http_app_start(bool lru_purge_enable){
 			const char page_connect[] = "connect.json";
 			const char page_ap[] = "ap.json";
 			const char page_status[] = "status.json";
+			const char page_close[] = "close-server";
 
 			/* root url, eg "/"   */
 			const size_t http_root_url_sz = sizeof(char) * (root_len+1);
@@ -462,6 +468,7 @@ void http_app_start(bool lru_purge_enable){
 			http_connect_url = http_app_generate_url(page_connect);
 			http_ap_url = http_app_generate_url(page_ap);
 			http_status_url = http_app_generate_url(page_status);
+			http_close_server_url = http_app_generate_url(page_close);
 
 		}
 
@@ -474,5 +481,6 @@ void http_app_start(bool lru_purge_enable){
 	        httpd_register_uri_handler(httpd_handle, &http_server_delete_request);
 	    }
 	}
+	ESP_LOGI(TAG, "http_app started");
 
 }

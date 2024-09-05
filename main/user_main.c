@@ -36,11 +36,13 @@ SOFTWARE.
 #include "esp_log.h"
 
 #include "wifi_manager/wifi_manager.h"
-
+#include "hello_world_server.h"
+#include "wifi_manager/servers/http_app.h"
 
 
 /* @brief tag used for ESP serial console messages */
 static const char TAG[] = "main";
+
 
 
 
@@ -57,6 +59,12 @@ void cb_connection_ok(void *pvParameter){
 	ESP_LOGI(TAG, "I have a connection and my IP is %s!", str_ip);
 }
 
+void cb_start_custom_server(void *pvParameter){
+	start_hello_world_webserver();
+	// http_app_start(true);
+}
+
+
 void app_main()
 {
 	/* start the wifi manager */
@@ -64,6 +72,9 @@ void app_main()
 
 	/* register a callback as an example to how you can integrate your code with the wifi manager */
 	wifi_manager_set_callback(WM_EVENT_STA_GOT_IP, &cb_connection_ok);
+
+	/* register a callback for the start of the custom server */
+	wifi_manager_set_callback(WM_EVENT_STA_GOT_IP, &cb_start_custom_server);
 
 	/* your code should go here. Here we simply create a task on core 2 that monitors free heap memory */
 }

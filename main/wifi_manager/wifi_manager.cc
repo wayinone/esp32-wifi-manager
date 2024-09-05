@@ -663,8 +663,8 @@ static void wifi_manager_event_handler(void* arg, esp_event_base_t event_base, i
 			xEventGroupClearBits(wifi_manager_event_group, WIFI_MANAGER_WIFI_CONNECTED_BIT | WIFI_MANAGER_SCAN_BIT);
 
 			/* post disconnect event with reason code */
-			wifi_manager_send_message(WM_EVENT_STA_DISCONNECTED, (void*)wifi_event_sta_disconnected );}
-			break;
+			wifi_manager_send_message(WM_EVENT_STA_DISCONNECTED, (void*)wifi_event_sta_disconnected );
+			} break;
 
 		/* This event arises when the AP to which the station is connected changes its authentication mode, e.g., from no auth
 		 * to WPA. Upon receiving this event, the event task will do nothing. Generally, the application event callback does
@@ -712,40 +712,40 @@ static void wifi_manager_event_handler(void* arg, esp_event_base_t event_base, i
 
 		switch(event_id){
 
-		/* This event arises when the DHCP client successfully gets the IPV4 address from the DHCP server,
-		 * or when the IPV4 address is changed. The event means that everything is ready and the application can begin
-		 * its tasks (e.g., creating sockets).
-		 * The IPV4 may be changed because of the following reasons:
-		 *    The DHCP client fails to renew/rebind the IPV4 address, and the station’s IPV4 is reset to 0.
-		 *    The DHCP client rebinds to a different address.
-		 *    The static-configured IPV4 address is changed.
-		 * Whether the IPV4 address is changed or NOT is indicated by field ip_change of ip_event_got_ip_t.
-		 * The socket is based on the IPV4 address, which means that, if the IPV4 changes, all sockets relating to this
-		 * IPV4 will become abnormal. Upon receiving this event, the application needs to close all sockets and recreate
-		 * the application when the IPV4 changes to a valid one. */
-		case IP_EVENT_STA_GOT_IP:{
-			ESP_LOGI(TAG, "IP_EVENT_STA_GOT_IP");
-	        xEventGroupSetBits(wifi_manager_event_group, WIFI_MANAGER_WIFI_CONNECTED_BIT);
-	        ip_event_got_ip_t* ip_event_got_ip = (ip_event_got_ip_t*)malloc(sizeof(ip_event_got_ip_t));
-			*ip_event_got_ip =  *( (ip_event_got_ip_t*)event_data );
-	        wifi_manager_send_message(WM_EVENT_STA_GOT_IP, (void*)(ip_event_got_ip) );}
-			break;
+			/* This event arises when the DHCP client successfully gets the IPV4 address from the DHCP server,
+			* or when the IPV4 address is changed. The event means that everything is ready and the application can begin
+			* its tasks (e.g., creating sockets).
+			* The IPV4 may be changed because of the following reasons:
+			*    The DHCP client fails to renew/rebind the IPV4 address, and the station’s IPV4 is reset to 0.
+			*    The DHCP client rebinds to a different address.
+			*    The static-configured IPV4 address is changed.
+			* Whether the IPV4 address is changed or NOT is indicated by field ip_change of ip_event_got_ip_t.
+			* The socket is based on the IPV4 address, which means that, if the IPV4 changes, all sockets relating to this
+			* IPV4 will become abnormal. Upon receiving this event, the application needs to close all sockets and recreate
+			* the application when the IPV4 changes to a valid one. */
+			case IP_EVENT_STA_GOT_IP:{
+				ESP_LOGI(TAG, "IP_EVENT_STA_GOT_IP");
+				xEventGroupSetBits(wifi_manager_event_group, WIFI_MANAGER_WIFI_CONNECTED_BIT);
+				ip_event_got_ip_t* ip_event_got_ip = (ip_event_got_ip_t*)malloc(sizeof(ip_event_got_ip_t));
+				*ip_event_got_ip =  *( (ip_event_got_ip_t*)event_data );
+				wifi_manager_send_message(WM_EVENT_STA_GOT_IP, (void*)(ip_event_got_ip) );
+			} break;
 
-		/* This event arises when the IPV6 SLAAC support auto-configures an address for the ESP32, or when this address changes.
-		 * The event means that everything is ready and the application can begin its tasks (e.g., creating sockets). */
-		case IP_EVENT_GOT_IP6:{
-			ESP_LOGI(TAG, "IP_EVENT_GOT_IP6");}
-			break;
+			/* This event arises when the IPV6 SLAAC support auto-configures an address for the ESP32, or when this address changes.
+			* The event means that everything is ready and the application can begin its tasks (e.g., creating sockets). */
+			case IP_EVENT_GOT_IP6:{
+				ESP_LOGI(TAG, "IP_EVENT_GOT_IP6");
+			} break;
 
-		/* This event arises when the IPV4 address become invalid.
-		 * IP_STA_LOST_IP doesn’t arise immediately after the WiFi disconnects, instead it starts an IPV4 address lost timer,
-		 * if the IPV4 address is got before ip lost timer expires, IP_EVENT_STA_LOST_IP doesn’t happen. Otherwise, the event
-		 * arises when IPV4 address lost timer expires.
-		 * Generally the application don’t need to care about this event, it is just a debug event to let the application
-		 * know that the IPV4 address is lost. */
-		case IP_EVENT_STA_LOST_IP:{
-			ESP_LOGI(TAG, "IP_EVENT_STA_LOST_IP");}
-			break;
+			/* This event arises when the IPV4 address become invalid.
+			* IP_STA_LOST_IP doesn’t arise immediately after the WiFi disconnects, instead it starts an IPV4 address lost timer,
+			* if the IPV4 address is got before ip lost timer expires, IP_EVENT_STA_LOST_IP doesn’t happen. Otherwise, the event
+			* arises when IPV4 address lost timer expires.
+			* Generally the application don’t need to care about this event, it is just a debug event to let the application
+			* know that the IPV4 address is lost. */
+			case IP_EVENT_STA_LOST_IP:{
+				ESP_LOGI(TAG, "IP_EVENT_STA_LOST_IP");
+			} break;
 
 		}
 	}
@@ -983,7 +983,7 @@ void wifi_manager( void * pvParameters ){
 		xStatus = xQueueReceive( wifi_manager_queue, &msg, portMAX_DELAY );
 
 		if( xStatus == pdPASS ){
-			switch(msg.code){
+		  switch(msg.code){
 
 			case WM_EVENT_SCAN_DONE:{
 				wifi_event_sta_scan_done_t *evt_scan_done = (wifi_event_sta_scan_done_t*)msg.param;
@@ -1008,25 +1008,29 @@ void wifi_manager( void * pvParameters ){
 				/* callback */
 				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])( msg.param );
 				free(evt_scan_done);
-				}
-				break;
+			} break;
 
-			case WM_ORDER_START_WIFI_SCAN:{
+			case WM_ORDER_START_WIFI_SCAN: {
 				ESP_LOGD(TAG, "MESSAGE: ORDER_START_WIFI_SCAN");
 
 				/* if a scan is already in progress this message is simply ignored thanks to the WIFI_MANAGER_SCAN_BIT uxBit */
 				uxBits = xEventGroupGetBits(wifi_manager_event_group);
 				if(! (uxBits & WIFI_MANAGER_SCAN_BIT) ){
 					xEventGroupSetBits(wifi_manager_event_group, WIFI_MANAGER_SCAN_BIT);
-					ESP_ERROR_CHECK(esp_wifi_scan_start(&scan_config, false));
+					if (esp_wifi_scan_start(&scan_config, false) == ESP_OK) {
+						ESP_LOGI(TAG, "Scan started...");
+					}
+					else{
+						ESP_LOGE(TAG, "Unable to start scan!");
+						xEventGroupClearBits(wifi_manager_event_group, WIFI_MANAGER_SCAN_BIT);
+					}
 				}
 
 				/* callback */
 				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
+			} break;
 
-				break;
-
-			case WM_ORDER_LOAD_AND_RESTORE_STA:
+			case WM_ORDER_LOAD_AND_RESTORE_STA: {
 				ESP_LOGI(TAG, "MESSAGE: ORDER_LOAD_AND_RESTORE_STA");
 				if(wifi_manager_fetch_wifi_sta_config()){
 					ESP_LOGI(TAG, "Saved wifi found on startup. Will attempt to connect.");
@@ -1040,8 +1044,7 @@ void wifi_manager( void * pvParameters ){
 
 				/* callback */
 				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
-		}
-				break;
+			} break;
 
 			case WM_ORDER_CONNECT_STA:{
 				ESP_LOGI(TAG, "MESSAGE: ORDER_CONNECT_STA");
@@ -1051,14 +1054,19 @@ void wifi_manager( void * pvParameters ){
 				 * by the wifi_manager.
 				 * */
 				if((BaseType_t)msg.param == CONNECTION_REQUEST_USER) {
+					ESP_LOGI(TAG, "Connection attempt requested by user.");
 					xEventGroupSetBits(wifi_manager_event_group, WIFI_MANAGER_REQUEST_STA_CONNECT_BIT);
 				}
 				else if((BaseType_t)msg.param == CONNECTION_REQUEST_RESTORE_CONNECTION) {
+					ESP_LOGI(TAG, "Connection attempt requested by wifi_manager.");
 					xEventGroupSetBits(wifi_manager_event_group, WIFI_MANAGER_REQUEST_RESTORE_STA_BIT);
+					http_app_stop();
 				}
 
 				uxBits = xEventGroupGetBits(wifi_manager_event_group);
+
 				if( ! (uxBits & WIFI_MANAGER_WIFI_CONNECTED_BIT) ){
+					ESP_LOGI(TAG, "WM_ORDER_CONNECT_STA: Attempting connection to AP...");
 					/* update config to latest and attempt connection */
 					ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, wifi_manager_get_wifi_sta_config()));
 
@@ -1075,8 +1083,7 @@ void wifi_manager( void * pvParameters ){
 
 				/* callback */
 				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
-				}
-				break;
+				} break;
 
 			case WM_EVENT_STA_DISCONNECTED:{
 				;wifi_event_sta_disconnected_t* wifi_event_sta_disconnected = (wifi_event_sta_disconnected_t*)msg.param;
@@ -1209,8 +1216,7 @@ void wifi_manager( void * pvParameters ){
 				/* callback */
 				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])( msg.param );
 				free(wifi_event_sta_disconnected);
-		}
-				break;
+				} break;
 
 			case WM_ORDER_START_AP:{
 				ESP_LOGI(TAG, "MESSAGE: ORDER_START_AP");
@@ -1225,9 +1231,8 @@ void wifi_manager( void * pvParameters ){
 				dns_server_start();
 
 				/* callback */
-				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);}
-
-				break;
+				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
+				} break;
 
 			case WM_ORDER_STOP_AP:{
 				ESP_LOGI(TAG, "MESSAGE: ORDER_STOP_AP");
@@ -1248,13 +1253,11 @@ void wifi_manager( void * pvParameters ){
 
 					/* restart HTTP daemon */
 					http_app_stop();
-					http_app_start(false);
 
 					/* callback */
 					if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])(NULL);
 				}
-				}
-				break;
+			} break;
 
 			case WM_EVENT_STA_GOT_IP:{
 				ESP_LOGI(TAG, "WM_EVENT_STA_GOT_IP");
@@ -1289,6 +1292,8 @@ void wifi_manager( void * pvParameters ){
 				/* bring down DNS hijack */
 				dns_server_stop();
 
+				
+
 				/* start the timer that will eventually shutdown the access point
 				 * We check first that it's actually running because in case of a boot and restore connection
 				 * the AP is not even started to begin with.
@@ -1309,7 +1314,7 @@ void wifi_manager( void * pvParameters ){
 				/* callback and free memory allocated for the void* param */
 				if(cb_ptr_arr[msg.code]) (*cb_ptr_arr[msg.code])( msg.param );
 				free(ip_event_got_ip);
-}
+				}
 				break;
 
 			case WM_ORDER_DISCONNECT_STA:{
@@ -1329,7 +1334,7 @@ void wifi_manager( void * pvParameters ){
 			default:{}
 				break;
 
-			} /* end of switch/case */
+		  } /* end of switch/case */
 		} /* end of if status=pdPASS */
 	} /* end of for loop */
 
