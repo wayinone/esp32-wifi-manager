@@ -39,18 +39,15 @@ SOFTWARE.
 #include "hello_world_server.h"
 #include "wifi_manager/servers/http_app.h"
 
-
 /* @brief tag used for ESP serial console messages */
 static const char TAG[] = "main";
-
-
-
 
 /**
  * @brief this is an exemple of a callback that you can setup in your own app to get notified of wifi manager event.
  */
-void cb_connection_ok(void *pvParameter){
-	ip_event_got_ip_t* param = (ip_event_got_ip_t*)pvParameter;
+void cb_connection_ok(void *pvParameter)
+{
+	ip_event_got_ip_t *param = (ip_event_got_ip_t *)pvParameter;
 
 	/* transform IP to human readable string */
 	char str_ip[16];
@@ -59,22 +56,16 @@ void cb_connection_ok(void *pvParameter){
 	ESP_LOGI(TAG, "I have a connection and my IP is %s!", str_ip);
 }
 
-void cb_start_custom_server(void *pvParameter){
+void cb_start_custom_server(void *pvParameter)
+{
 	start_hello_world_webserver();
 	// http_app_start(true);
 }
-
 
 void app_main()
 {
 	/* start the wifi manager */
 	wifi_manager_start();
-
-	/* register a callback as an example to how you can integrate your code with the wifi manager */
-	wifi_manager_set_callback(WM_EVENT_STA_GOT_IP, &cb_connection_ok);
-
 	/* register a callback for the start of the custom server */
 	wifi_manager_set_callback(WM_READY_FOR_CUSTOM_PROCESS, &cb_start_custom_server);
-
-	/* your code should go here. Here we simply create a task on core 2 that monitors free heap memory */
 }

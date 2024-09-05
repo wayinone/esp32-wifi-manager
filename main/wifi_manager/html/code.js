@@ -305,6 +305,10 @@ async function checkStatus(url = "status.json") {
             document.querySelector("#connect-details h1").textContent =
               data["ssid"];
             gel("ip").textContent = data["ip"];
+
+            gel("href_ip").href = 'http://' + data["ip"];
+            gel("href_ip").textContent = data["ip"];
+
             gel("netmask").textContent = data["netmask"];
             gel("gw").textContent = data["gw"];
             gel("wifi-status").style.display = "block";
