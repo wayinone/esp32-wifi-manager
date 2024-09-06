@@ -1,10 +1,22 @@
 # esp32-wifi-manager V2
 
-# Original esp32-wifi-manager
+# Wifi Provisioning & the origin of this Repo
 This repo is copied from [esp32-wifi-manager](https://github.com/tonyp7/esp32-wifi-manager). 
 When use the code, I have encountered some problem (may be due to the newer esp-idf version). I then made some changes to fix bugs, and make some enhancement. Most of the original features were retained.
 
-Note that, currently, the official [Espressif wifi provisioning](https://github.com/espressif/esp-idf/tree/v5.3.1/examples/provisioning/wifi_prov_mgr) is through an App with either BLE or SoftAP. The component here use only SoftAP and not require additional app to be download for user.
+Note that, currently, the official [Espressif wifi provisioning](https://github.com/espressif/esp-idf/tree/v5.3.1/examples/provisioning/wifi_prov_mgr) is through an App with either BLE or SoftAP. However, when I tried to include in a big project, the memory requirement is too big and I can't solve that easily. For small project, I think you should first choose the official route.
+
+The component here use only SoftAP and not require additional app to be download for user, besides, the size is smaller and can fit into my big project.
+
+# Installation
+To include this into your esp-idf project, add the following in your `idf_component.yaml` file
+
+```
+dependencies:
+  wifi-manager:
+    git: "https://github.com/wayinone/esp32-wifi-manager.git"
+    path: "components/wifi_manager"
+```
 
 # Usage
 1. For first time setup, the device will entering AP mode, and user should select the SSID `esp32` in the wifi setting, with password `esp32pwd`
