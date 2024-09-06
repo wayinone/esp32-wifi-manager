@@ -12,5 +12,5 @@ idf_component_register(
     EMBED_FILES 
         "wifi_manager/html/style.css" 
         "wifi_manager/html/code.js" 
-        "wifi_manager/html/index.html"        
+        "wifi_manager/html/index.html"
 )

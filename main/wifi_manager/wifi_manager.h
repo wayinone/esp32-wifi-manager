@@ -33,6 +33,11 @@ Contains the freeRTOS task and all necessary support
 #define WIFI_MANAGER_H_INCLUDED
 
 #include <stdbool.h>
+#include <esp_wifi.h>
+#include <esp_netif.h>
+#include <esp_err.h>
+
+#include <freertos/FreeRTOS.h>
 
 
 #ifdef __cplusplus
@@ -329,7 +334,7 @@ void wifi_manager_connect_async();
 /**
  * @brief requests a wifi scan
  */
-void wifi_manager_scan_awifi_manager_send_messagesync();
+void wifi_manager_scan_async();
 
 /**
  * @brief requests to disconnect and forget about the access point.

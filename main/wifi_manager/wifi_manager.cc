@@ -29,22 +29,19 @@ Contains the freeRTOS task and all necessary support
 @see https://github.com/tonyp7/esp32-wifi-manager
 */
 
+#include "wifi_manager.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include "esp_system.h"
-#include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
 #include <freertos/task.h>
 #include <freertos/event_groups.h>
 #include <freertos/timers.h>
 
-
-#include "esp_wifi.h"
 #include "esp_event.h"
-#include "esp_netif.h"
 #include "esp_wifi_types.h"
 #include "esp_log.h"
 #include "nvs.h"
@@ -60,7 +57,6 @@ Contains the freeRTOS task and all necessary support
 #include "servers/http_app.h"
 #include "servers/dns_server.h"
 #include "utils/nvs_sync.h"
-#include "wifi_manager.h"
 
 
 
