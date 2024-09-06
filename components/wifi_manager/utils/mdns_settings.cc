@@ -12,7 +12,6 @@
 #include "nvs_flash.h"
 #include "esp_netif.h"
 #include "mdns.h"
-// #include "driver/gpio.h"
 #include "netdb.h"
 #include "esp_err.h"
 
@@ -60,9 +59,4 @@ void initWifiMDNS(void)
     //set default mDNS instance name
     ESP_ERROR_CHECK( mdns_instance_name_set(MDNS_INSTANCE) );
     free(hostname);
-}
-
-void get_mdns_host_name(char *hostname)
-{
-    mdns_hostname_get(hostname);
 }

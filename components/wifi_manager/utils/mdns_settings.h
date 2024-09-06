@@ -12,6 +12,4 @@
 void initWifiMDNS(void);
 
 
-void get_mdns_host_name(char *hostname);
-
 #endif

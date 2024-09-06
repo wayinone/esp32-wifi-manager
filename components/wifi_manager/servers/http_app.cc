@@ -141,8 +141,7 @@ static esp_err_t http_server_post_handler(httpd_req_t *req){
 			memset(config, 0x00, sizeof(wifi_config_t));
 			memcpy(config->sta.ssid, ssid, ssid_len);
 			memcpy(config->sta.password, password, password_len);
-			ESP_LOGI(TAG, "ssid: %s, password: %s", ssid, password);
-			ESP_LOGI(TAG, "http_server_post_handler: wifi_manager_connect_async() call");
+			ESP_LOGI(TAG, "User request wifi connect with ssid: %s, password: %s", ssid, password);
 			wifi_manager_connect_async();
 
 			/* free memory */

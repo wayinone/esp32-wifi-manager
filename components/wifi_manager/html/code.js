@@ -306,9 +306,12 @@ async function checkStatus(url = "status.json") {
               data["ssid"];
             gel("ip").textContent = data["ip"];
 
-            gel("href_ip").href = 'http://' + data["ip"];
-            gel("href_ip").textContent = data["ip"];
+            // if mdns is available, set website to it, otherwise use ip
+            var website = (data["mdns"] != "null") ? data["mdns"] : data["ip"];
 
+            gel("href_ip").href = 'http://' + website;
+            gel("href_ip").textContent = website;
+            
             gel("netmask").textContent = data["netmask"];
             gel("gw").textContent = data["gw"];
             gel("wifi-status").style.display = "block";

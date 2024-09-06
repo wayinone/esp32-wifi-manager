@@ -31,6 +31,7 @@ SOFTWARE.
 #include "hello_world_server.h"
 
 #include "wifi_manager.h"
+#include "mdns_settings.h"
 
 
 static const char TAG[] = "main";
@@ -52,6 +53,7 @@ void cb_connection_ok(void *pvParameter)
 void cb_start_custom_server(void *pvParameter)
 {
 	start_hello_world_webserver();
+	
 }
 
 void app_main()

@@ -20,13 +20,15 @@ Note that, currently, the official [Espressif wifi provisioning](https://github.
      <img src="./assets/enter_pw.PNG" alt="img" width="300">
 
 
-4. (NEW FEATURE) Once success, your wifi credential is stored
+4. (NEW FEATURE) Once success, your wifi credential is stored. First one shows the success screen when user didn't enable mDNS. Another one is when user enable mDNS (in the configuration) with `MDNS_HOSTNAME=esp32-mdns` and have `MDNS_ADD_MAC_TO_HOSTNAME=true`.
    
    <img src="./assets/connect_success.PNG" alt="img" width="300">
+   <img src="./assets/connect_success_with_mdns.PNG" alt="img" width="300">
 
    Hit "Close" will close the Access Point and your phone should automatically go back to your previous WIFI setting. Then you can hit the hyper link (in this case `192.168.1.7`) to access the hello world server provided by this example.
 
      <img src="./assets/hello_world.PNG" alt="img" width="300">
+
 
 # Enhancement
 * Re-arrange code so that it is easier to maintain and navigate.
@@ -64,6 +66,10 @@ Note that, currently, the official [Espressif wifi provisioning](https://github.
   ```
     * This way, the custom webserver or process will be started once `WM_READY_FOR_CUSTOM_PROCESS` is triggered.
       * Previsously, the recommendation was to use `WM_EVENT_STA_GOT_IP` , however, when user just set up wifi password in the setting page, it will cause the service hang if we want to stop the wifi setting server (hence I implemented an extra api `close-server`)
+* Adding mDNS support: New mDNS configuration is supported in configuration!
+  * `USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP` (bool, default: `false`)
+  * `MDNS_HOSTNAME` (string) the resulting hose name will be `[MDNS_HOSTNAME].local`
+  * `MDNS_ADD_MAC_TO_HOSTNAME` (bool) user can use this to differentiate multiple devices with same hostname.
 
 # Configuration
 

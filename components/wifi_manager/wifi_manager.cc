@@ -21,7 +21,6 @@ Revision author: Wayne Wang
 #include "esp_log.h"
 #include "nvs.h"
 #include "nvs_flash.h"
-// #include "mdns.h"
 #include "lwip/api.h"
 #include "lwip/err.h"
 #include "lwip/netdb.h"
@@ -31,7 +30,11 @@ Revision author: Wayne Wang
 #include "servers/http_app.h"
 #include "servers/dns_server.h"
 #include "utils/nvs_sync.h"
-#include "utils/mdns_settings.h"
+
+#ifdef USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
+	#include "utils/mdns_settings.h"
+	#include "mdns.h"
+#endif
 
 /* objects used to manipulate the main queue of events */
 QueueHandle_t wifi_manager_queue;
@@ -387,8 +390,9 @@ void wifi_manager_generate_ip_info_json(update_reason_code_t update_reason_code)
 	wifi_config_t *config = wifi_manager_get_wifi_sta_config();
 	if (config)
 	{
+		char mdns_hostname[MAX_MDNS_HOSTNAME_SIZE]; 		
 
-		const char *ip_info_json_format = ",\"ip\":\"%s\",\"netmask\":\"%s\",\"gw\":\"%s\",\"urc\":%d}\n";
+		const char *ip_info_json_format = ",\"ip\":\"%s\",\"netmask\":\"%s\",\"gw\":\"%s\",\"urc\":%d, \"mdns\":\"%s\"}\n";
 
 		memset(ip_info_json, 0x00, JSON_IP_INFO_SIZE);
 
@@ -400,6 +404,13 @@ void wifi_manager_generate_ip_info_json(update_reason_code_t update_reason_code)
 		size_t remaining = JSON_IP_INFO_SIZE - ip_info_json_len;
 		if (update_reason_code == UPDATE_CONNECTION_OK)
 		{
+			if (USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP)
+			{
+				ESP_ERROR_CHECK(mdns_hostname_get(mdns_hostname));
+				strcat(mdns_hostname, ".local");
+			} else {
+				strcpy(mdns_hostname, "null");
+			}
 			/* rest of the information is copied after the ssid */
 			esp_netif_ip_info_t ip_info;
 			ESP_ERROR_CHECK(esp_netif_get_ip_info(esp_netif_sta, &ip_info));
@@ -416,7 +427,9 @@ void wifi_manager_generate_ip_info_json(update_reason_code_t update_reason_code)
 					 ip,
 					 netmask,
 					 gw,
-					 (int)update_reason_code);
+					 (int)update_reason_code,
+					 mdns_hostname					 
+					 );
 		}
 		else
 		{
@@ -425,7 +438,9 @@ void wifi_manager_generate_ip_info_json(update_reason_code_t update_reason_code)
 					 "0",
 					 "0",
 					 "0",
-					 (int)update_reason_code);
+					 (int)update_reason_code,
+					 "0"
+					 );
 		}
 	}
 	else

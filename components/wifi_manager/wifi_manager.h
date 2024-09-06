@@ -24,6 +24,8 @@ extern "C" {
  */
 #define USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP CONFIG_USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
 
+# define MAX_MDNS_HOSTNAME_SIZE 32
+
 
 /**
  * @brief Defines the maximum size of a SSID name. 32 is IEEE standard.
@@ -158,17 +160,17 @@ extern "C" {
 /**
  * @brief Defines the maximum length in bytes of a JSON representation of the IP information
  * assuming all ips are 4*3 digits, and all characters in the ssid require to be escaped.
- * example: {"ssid":"abcdefghijklmnopqrstuvwxyz012345","ip":"192.168.1.119","netmask":"255.255.255.0","gw":"192.168.1.1","urc":99}
- * Run this JS (browser console is easiest) to come to the conclusion that 159 is the worst case.
+ * example: {"ssid":"abcdefghijklmnopqrstuvwxyz012345","ip":"192.168.1.119","netmask":"255.255.255.0","gw":"192.168.1.1","urc":99, "mdns":"abcdefghijklmnopqrstuvwxyz012345-CDA29C.local"}
+ * Run this JS (browser console is easiest) to come to the conclusion that 213 is the worst case.
  * ```
- * var a = {"ssid":"abcdefghijklmnopqrstuvwxyz012345","ip":"255.255.255.255","netmask":"255.255.255.255","gw":"255.255.255.255","urc":99};
+ * var a = {"ssid":"abcdefghijklmnopqrstuvwxyz012345","ip":"255.255.255.255","netmask":"255.255.255.255","gw":"255.255.255.255","urc":99, "mdns":"abcdefghijklmnopqrstuvwxyz012345-CDA29C.local"}
  * // Replace all ssid characters with a double quote which will have to be escaped
  * a.ssid = a.ssid.split('').map(() => '"').join('');
- * console.log(JSON.stringify(a).length); // => 158 +1 for null
+ * console.log(JSON.stringify(a).length); // => 213 +1 for null
  * console.log(JSON.stringify(a)); // print it
  * ```
  */
-#define JSON_IP_INFO_SIZE 					159
+#define JSON_IP_INFO_SIZE 					214
 
 
 /**
