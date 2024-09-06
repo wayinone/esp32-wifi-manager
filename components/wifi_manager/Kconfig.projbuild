@@ -1,5 +1,34 @@
 menu "Wifi Manager Configuration"
 
+config USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
+    bool "Enable mDNS"
+    default y
+    help
+        Enable mDNS service, so that the wifi station can be accessed by both mDNS hostname and actual IP address. 
+        This setting affect both Wifi SoftAP and Station mode.
+
+    config MDNS_HOSTNAME
+        string "mDNS Hostname"
+        depends on USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
+        default "esp32-mdns" 
+        help
+            mDNS Hostname to use. I.e. '[MDNS_HOSTNAME].local' will be the hostname to access the configuration portal.
+
+    config MDNS_INSTANCE
+        string "mDNS Instance Name"
+        depends on USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
+        default "ESP32 with mDNS"
+        help
+            mDNS Instance Name for example to use
+
+    config MDNS_ADD_MAC_TO_HOSTNAME
+        bool "Add mac suffix to hostname"
+        depends on USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
+        default n
+        help
+            If enabled, a portion of MAC address is added to the hostname, this is used
+            for evaluation of tests in CI
+
 config WIFI_MANAGER_TASK_PRIORITY
     int "RTOS Task Priority for the wifi_manager"
     default 5

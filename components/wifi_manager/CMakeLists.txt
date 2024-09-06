@@ -5,6 +5,7 @@ set(
         "servers/dns_server.cc"
         "utils/json.cc"
         "utils/nvs_sync.cc"
+        "utils/mdns_settings.cc"
     )
 
 set(
@@ -15,6 +16,7 @@ set(
         "lwip" 
         "wpa_supplicant"
         "log"
+        "mdns"
     )
 
 set(COMPONENT_ADD_INCLUDEDIRS "." "utils" "servers")  # For all the .h files

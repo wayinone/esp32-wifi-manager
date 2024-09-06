@@ -19,6 +19,11 @@ Revision author: Wayne Wang
 extern "C" {
 #endif
 
+/**
+ * @brief using mDNS hostname and IP address in both AP and STA mode
+ */
+#define USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP CONFIG_USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
+
 
 /**
  * @brief Defines the maximum size of a SSID name. 32 is IEEE standard.
@@ -361,14 +366,8 @@ void wifi_manager_generate_acess_points_json();
  */
 void wifi_manager_clear_access_points_json();
 
-
-/**
- * @brief Start the mDNS service
- */
-void wifi_manager_initialise_mdns();
-
-
 bool wifi_manager_lock_sta_ip_string(TickType_t xTicksToWait);
+
 void wifi_manager_unlock_sta_ip_string();
 
 /**

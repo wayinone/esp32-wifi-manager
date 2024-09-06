@@ -31,6 +31,7 @@ Revision author: Wayne Wang
 #include "servers/http_app.h"
 #include "servers/dns_server.h"
 #include "utils/nvs_sync.h"
+#include "utils/mdns_settings.h"
 
 /* objects used to manipulate the main queue of events */
 QueueHandle_t wifi_manager_queue;
@@ -945,9 +946,13 @@ void wifi_manager(void *pvParameters)
 
 	/* event loop for the wifi driver */
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
+	
+	if (USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP) {
+        initWifiMDNS();
+    };
 
-	esp_netif_sta = esp_netif_create_default_wifi_sta();
 	esp_netif_ap = esp_netif_create_default_wifi_ap();
+	esp_netif_sta = esp_netif_create_default_wifi_sta();
 
 	/* default wifi config */
 	wifi_init_config_t wifi_init_config = WIFI_INIT_CONFIG_DEFAULT();
