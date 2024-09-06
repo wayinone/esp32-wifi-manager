@@ -1,7 +1,7 @@
 menu "Wifi Manager Configuration"
 
 config USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
-    bool "Enable mDNS"
+    bool "Enable mDNS for custom hostname as address"
     default n
     help
         Enable mDNS service, so that the wifi station can be accessed by both mDNS hostname and actual IP address. 
@@ -12,7 +12,7 @@ config USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
         depends on USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
         default "esp32-mdns" 
         help
-            mDNS Hostname to use. I.e. '[MDNS_HOSTNAME].local' will be the hostname to access the configuration portal.
+            mDNS Hostname to use (max 50 characters), accept "a-z", "A-Z", "0-9", "-" and "_" (case insensitive). The resulting http address is `[MDNS_HOSTNAME].local`
 
     config MDNS_INSTANCE
         string "mDNS Instance Name"
@@ -27,7 +27,7 @@ config USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
         default n
         help
             If enabled, a portion of MAC address is added to the hostname, user can use this to differentiate multiple devices with same hostname.
-            e.g. [MDNS_HOSTNAME]-3a1b2c
+            e.g. the host name may like `[MDNS_HOSTNAME]-3a1b2c`
 
 config WIFI_MANAGER_TASK_PRIORITY
     int "RTOS Task Priority for the wifi_manager"

@@ -65,10 +65,10 @@ Note that, currently, the official [Espressif wifi provisioning](https://github.
 
   ```
     * This way, the custom webserver or process will be started once `WM_READY_FOR_CUSTOM_PROCESS` is triggered.
-      * Previsously, the recommendation was to use `WM_EVENT_STA_GOT_IP` , however, when user just set up wifi password in the setting page, it will cause the service hang if we want to stop the wifi setting server (hence I implemented an extra api `close-server`)
-* Adding mDNS support: New mDNS configuration is supported in configuration!
+      * Previsously, the recommendation was to use `WM_EVENT_STA_GOT_IP` , however, when user just set up wifi password in the setting page, it will sometimes cause the service to hang if we want to stop the wifi setting server and start custom server (hence I implemented an extra api `close-server`)
+* Adding mDNS support (**allow custom hostname for ip address**): New mDNS configuration is supported in configuration! See `idf.py menuconfig` -> `Wifi Manager Configuration` for more info.
   * `USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP` (bool, default: `false`)
-  * `MDNS_HOSTNAME` (string) the resulting hose name will be `[MDNS_HOSTNAME].local`
+  * `MDNS_HOSTNAME` (string) the resulting hose name will be `[MDNS_HOSTNAME].local` accept "a-z", "A-Z", "0-9", "-" and "_" (case insensitive).
   * `MDNS_ADD_MAC_TO_HOSTNAME` (bool) user can use this to differentiate multiple devices with same hostname.
 
 # Configuration

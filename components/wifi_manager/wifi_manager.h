@@ -22,9 +22,20 @@ extern "C" {
 /**
  * @brief using mDNS hostname and IP address in both AP and STA mode
  */
-#define USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP CONFIG_USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
+#ifdef CONFIG_USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
+	#define USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP 1
+	#define MDNS_INSTANCE_NAME CONFIG_MDNS_INSTANCE
+	#define MDNS_HOSTNAME CONFIG_MDNS_HOSTNAME
+	#ifdef CONFIG_MDNS_ADD_MAC_TO_HOSTNAME
+		#define MDNS_ADD_MAC_TO_HOSTNAME 1
+	#else
+		#define MDNS_ADD_MAC_TO_HOSTNAME 0
+	#endif
+#else
+	#define USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP 0
+#endif
 
-# define MAX_MDNS_HOSTNAME_SIZE 32
+# define MAX_MDNS_HOSTNAME_SIZE 50
 
 
 /**
@@ -166,11 +177,11 @@ extern "C" {
  * var a = {"ssid":"abcdefghijklmnopqrstuvwxyz012345","ip":"255.255.255.255","netmask":"255.255.255.255","gw":"255.255.255.255","urc":99, "mdns":"abcdefghijklmnopqrstuvwxyz012345-CDA29C.local"}
  * // Replace all ssid characters with a double quote which will have to be escaped
  * a.ssid = a.ssid.split('').map(() => '"').join('');
- * console.log(JSON.stringify(a).length); // => 213 +1 for null
+ * console.log(JSON.stringify(a).length); // => 224 +1 for null
  * console.log(JSON.stringify(a)); // print it
  * ```
  */
-#define JSON_IP_INFO_SIZE 					214
+#define JSON_IP_INFO_SIZE 					225
 
 
 /**

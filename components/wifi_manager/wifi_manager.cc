@@ -962,9 +962,9 @@ void wifi_manager(void *pvParameters)
 	/* event loop for the wifi driver */
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
 	
-	if (USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP) {
-        initWifiMDNS();
-    };
+	#ifdef CONFIG_USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
+    	initWifiMDNS(MDNS_HOSTNAME, MDNS_INSTANCE_NAME, MDNS_ADD_MAC_TO_HOSTNAME);
+	#endif
 
 	esp_netif_ap = esp_netif_create_default_wifi_ap();
 	esp_netif_sta = esp_netif_create_default_wifi_sta();
