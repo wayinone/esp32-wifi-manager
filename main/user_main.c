@@ -28,12 +28,11 @@ SOFTWARE.
 
 #include "esp_system.h"
 #include "esp_log.h"
-
-#include "wifi_manager/wifi_manager.h"
 #include "hello_world_server.h"
-#include "wifi_manager/servers/http_app.h"
 
-/* @brief tag used for ESP serial console messages */
+#include "wifi_manager.h"
+
+
 static const char TAG[] = "main";
 
 /**
@@ -53,7 +52,6 @@ void cb_connection_ok(void *pvParameter)
 void cb_start_custom_server(void *pvParameter)
 {
 	start_hello_world_webserver();
-	// http_app_start(true);
 }
 
 void app_main()
