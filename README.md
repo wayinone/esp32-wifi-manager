@@ -18,6 +18,10 @@ dependencies:
     path: "components/wifi_manager"
 ```
 
+Then in your script, you should be able to 
+```
+#include "wifi_manager.h"
+```
 # Usage
 1. For first time setup, the device will entering AP mode, and user should select the SSID `esp32` in the wifi setting, with password `esp32pwd`
  
