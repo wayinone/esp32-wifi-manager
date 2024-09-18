@@ -9,14 +9,17 @@ Note that, currently, the official [Espressif wifi provisioning](https://github.
 The component here use only SoftAP and not require additional app to be download for user, besides, the size is smaller and can fit into my big project.
 
 # Installation
-To include this into your esp-idf project, add the following in your `idf_component.yaml` file
+To include this into your esp-idf project, add the following in your `idf_component.yaml` file (note that you should use the latest version). For more information about git dependency, you can view official document [here](https://docs.espressif.com/projects/idf-component-manager/en/latest/reference/manifest_file.html#component-dependencies)
+
 
 ```yaml
 dependencies:
-  wifi-manager:
+  wayinone__esp32-wifi-manager:
     git: "https://github.com/wayinone/esp32-wifi-manager.git"
     path: "components/wifi_manager"
+    version: "v4.0.0"
 ```
+Note that, if for some reason, you would like to change the version, you will have to remove the `dependencies.lock` file from your project's root folder, and rebuild again.
 
 Then in your script, you should be able to 
 ```cpp
