@@ -11,7 +11,7 @@ The component here use only SoftAP and not require additional app to be download
 # Installation
 To include this into your esp-idf project, add the following in your `idf_component.yaml` file
 
-```
+```yaml
 dependencies:
   wifi-manager:
     git: "https://github.com/wayinone/esp32-wifi-manager.git"
@@ -19,7 +19,7 @@ dependencies:
 ```
 
 Then in your script, you should be able to 
-```
+```cpp
 #include "wifi_manager.h"
 ```
 # Usage
@@ -63,7 +63,7 @@ Then in your script, you should be able to
   * I created a simple function `start_hello_world_webserver()` that spin up a very simple server. 
   * User can use the `wifi_manager_set_callback` when `WM_READY_FOR_CUSTOM_PROCESS` is triggered. E.g. 
   
-  ```
+  ```cpp
   #include "wifi_manager.h"
 
   void cb_start_custom_server(void *pvParameter)
@@ -87,7 +87,7 @@ Then in your script, you should be able to
   * `MDNS_HOSTNAME` (string) the resulting hose name will be `[MDNS_HOSTNAME].local` accept "a-z", "A-Z", "0-9", "-" and "_" (case insensitive).
   * `MDNS_ADD_MAC_TO_HOSTNAME` (bool) user can use this to differentiate multiple devices with same hostname.
 
-# Configuration
+# Develop environment
 
 This is what I use to test the code here.
 
