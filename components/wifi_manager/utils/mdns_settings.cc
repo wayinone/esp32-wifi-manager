@@ -28,23 +28,23 @@ static const char *TAG = "WIFI_MDNS_SETTINGS";
 /** Generate host name based on sdkconfig, optionally adding a portion of MAC address to it.
  *  @return host name string allocated from the heap
  */
-static char *generate_hostname(char *hostname_raw, bool add_mac_to_hostname)
+static char *generate_hostname(char *hostname_raw, bool add_mac_to_hostname, char *add_additional_suffix)
 {
+
+    int hostname_size = strlen(hostname_raw) + strlen(add_additional_suffix) + 7 * (int)add_mac_to_hostname + 2;
+    char hostname[hostname_size];
     if (add_mac_to_hostname)
     {
         uint8_t mac[6];
-        char *hostname;
         esp_read_mac(mac, ESP_MAC_WIFI_STA);
-        if (-1 == asprintf(&hostname, "%s-%02X%02X%02X", hostname_raw, mac[3], mac[4], mac[5]))
-        {
-            abort();
-        }
+        snprintf(hostname, hostname_size, "%s-%02X%02X%02X-%s", hostname_raw, mac[3], mac[4], mac[5], add_additional_suffix);
         return hostname;
     }
     else
     {
-        return strdup(hostname_raw);
+        snprintf(hostname, hostname_size, "%s-%s", hostname_raw, add_additional_suffix);
     }
+    return strdup(hostname);
 }
 
 /**
@@ -65,7 +65,6 @@ esp_err_t is_hostname_valid(char *hostname)
             return ESP_ERR_INVALID_ARG;
         }
     }
-    ESP_LOGI(TAG, "Hostname is valid");
     return ESP_OK;
 }
 
@@ -73,10 +72,10 @@ esp_err_t is_hostname_valid(char *hostname)
 // nvs_flash_init();
 // esp_netif_init();
 // esp_event_loop_create_default();
-void initWifiMDNS(char *hostname_raw, char *mdns_instance, bool add_mac_to_hostname)
+void initWifiMDNS(char *hostname_raw, char *mdns_instance, bool add_mac_to_hostname, char *add_additional_suffix)
 {
     ESP_ERROR_CHECK(is_hostname_valid(hostname_raw));
-    char *hostname = generate_hostname(hostname_raw, add_mac_to_hostname);
+    char *hostname = generate_hostname(hostname_raw, add_mac_to_hostname, add_additional_suffix);
 
     // initialize mDNS
     ESP_ERROR_CHECK(mdns_init());

@@ -961,9 +961,26 @@ void wifi_manager(void *pvParameters)
 
 	/* event loop for the wifi driver */
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
+
+	char additional_mdns_suffix[32] = "";
 	
 	#ifdef CONFIG_USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
-    	initWifiMDNS(MDNS_HOSTNAME, MDNS_INSTANCE_NAME, MDNS_ADD_MAC_TO_HOSTNAME);
+		#ifdef MDNS_SUFFIX_FROM_NVS_NAMESPACE
+			#ifdef MDNS_SUFFIX_FROM_NVS_KEY
+				nvs_handle_t my_handle;
+				if (nvs_open(MDNS_SUFFIX_FROM_NVS_NAMESPACE, NVS_READONLY, &my_handle)!=ESP_OK) {
+					ESP_LOGE(TAG, "Error opening NVS namespace %s", MDNS_SUFFIX_FROM_NVS_NAMESPACE);
+				} else {
+					size_t sz;
+					esp_err_t esp_err = nvs_get_str(my_handle, MDNS_SUFFIX_FROM_NVS_KEY, additional_mdns_suffix, &sz);
+					if (esp_err != ESP_OK) {
+						ESP_LOGE(TAG, "Error reading NVS key %s", MDNS_SUFFIX_FROM_NVS_KEY);
+					}
+					nvs_close(my_handle);
+				}
+			#endif
+		#endif
+    	initWifiMDNS(MDNS_HOSTNAME, MDNS_INSTANCE_NAME, MDNS_ADD_MAC_TO_HOSTNAME, additional_mdns_suffix);
 	#endif
 
 	esp_netif_ap = esp_netif_create_default_wifi_ap();

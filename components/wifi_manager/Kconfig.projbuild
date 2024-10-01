@@ -28,6 +28,29 @@ config USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
         help
             If enabled, a portion of MAC address is added to the hostname, user can use this to differentiate multiple devices with same hostname.
             e.g. the host name may like `[MDNS_HOSTNAME]-3a1b2c`
+    config MDNS_ADD_ADDITIONAL_SUFFIX_TO_HOSTNAME
+        bool "Add additional suffix to hostname"
+        depends on USE_BOTH_MDNS_HOSTNAME_AND_IP_IN_STA_AP
+        default n
+        help
+            If enabled, a suffix is added to the hostname, user can use this to differentiate multiple devices with same hostname.
+            e.g. the host name may like `[MDNS_HOSTNAME]-suffix`, if user also enable `Add mac suffix to hostname`, the host name may like `[MDNS_HOSTNAME]-3a1b2c-suffix`
+        
+        config MDNS_ADD_SUFFIX_FROM_NVS_NAMESPACE
+            string "NVS Namespace for additional suffix"
+            depends on MDNS_ADD_ADDITIONAL_SUFFIX_TO_HOSTNAME
+            default "storage"
+            help
+                NVS Namespace to store the additional suffix, the value is used as the suffix of the hostname.
+                The NVS value is read at boot time, so the hostname is fixed after boot
+        config MDNS_ADD_SUFFIX_FROM_NVS_KEY
+            string "NVS Key for additional suffix"
+            depends on MDNS_ADD_ADDITIONAL_SUFFIX_TO_HOSTNAME
+            default "mdns_suffix"
+            help
+                NVS Key to store the additional suffix, the value is used as the suffix of the hostname.
+                The NVS value is read at boot time, so the hostname is fixed after boot
+
 
 config WIFI_MANAGER_TASK_PRIORITY
     int "RTOS Task Priority for the wifi_manager"
